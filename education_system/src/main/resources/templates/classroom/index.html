@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý lớp học</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2 class="mb-3">Quản lý lớp học</h2>
+
+    <!-- Form thêm lớp học -->
+    <form th:action="@{/classroom/add}" method="post">
+        <label for="name">Tên lớp:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="maxStudents">Số lượng tối đa:</label>
+        <input type="number" id="maxStudents" name="maxStudents" required>
+
+        <button type="submit">Thêm lớp</button>
+    </form>
+
+
+    <!-- Danh sách lớp học -->
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên lớp</th>
+            <th>Sĩ số tối đa</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="classroom : ${classrooms}">
+            <td th:text="${classroom[0]}"></td>
+            <td th:text="${classroom[1]}"></td>
+            <td th:text="${classroom[2]}"></td>
+            <td>
+                <form th:action="@{'/classroom/update/' + ${classroom[0]}}" method="post" class="d-flex gap-2">
+                    <input type="hidden" name="_method" value="put">
+                    <input type="text" name="name" th:value="${classroom[1]}" class="form-control form-control-sm">
+                    <input type="number" name="maxStudents" th:value="${classroom[2]}" class="form-control form-control-sm" min="1">
+                    <button type="submit" class="btn btn-warning btn-sm">Cập nhật</button>
+                </form>
+
+                <form th:action="@{/classroom/delete/{id}(id=${classroom[0]})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa lớp này?');">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
